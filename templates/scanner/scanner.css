@@ -52,6 +52,13 @@ div.footer_navigation ul li > a#activated {
 	text-align: center;
 }
 
+div.middle #welcome {
+	padding: 10px 0;
+	text-align: center;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
 footer nav li a#Purchase span.purchase {
 	background: url('/cms/templates/scanner/images/credit_card.png') 50% 50% no-repeat;
 	background-size: 24px 24px;
