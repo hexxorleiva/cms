@@ -9,7 +9,8 @@ if ( $template_area == 'top' ) {
 		'/lib/js/sky.utils.js',
         '/templates/html5/cms-html5.js',
         '/lib/js/aqlForm.js',
-        '/lib/js/jquery.livequery.min.js'
+        '/lib/js/jquery.livequery.min.js',
+        '/templates/scanner/scanner.js'
     );
 
     $this->template_js = array_merge($this->template_js, $js);
@@ -50,7 +51,7 @@ if ( $template_area == 'top' ) {
 <?
 		if($this->breadcrumb) {
 ?>
-		<a href="<?=$this->breadcrumb?>">Back</a>
+		<a href="<?=$this->breadcrumb?>" data-transition="slide">Back</a>
 <?
 		}
 ?>
