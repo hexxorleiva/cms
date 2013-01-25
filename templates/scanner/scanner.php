@@ -47,6 +47,13 @@ if ( $template_area == 'top' ) {
 <div data-role="page" data-title="<?=$p->title?>" data-theme="<?=$this->data_theme?$this->data_theme:'d'?>">
     <div data-role="header">
         <?=$this->heading_left?$this->heading_left:''?>
+<?
+		if($this->breadcrumb) {
+?>
+		<a id="back_button" href="<?=$this->breadcrumb?>">Back</a>
+<?
+		}
+?>
         <h1><?=$this->heading?$this->heading:$this->title?></h1>
     </div> 
     <div data-role="content" > 
@@ -56,6 +63,26 @@ if ( $template_area == 'top' ) {
 } else if ( $template_area == 'bottom' ) {
 
 ?>
+		<div data-role="footer">
+<?
+		if($this->footer_nav) {
+?>
+			<div date-role="navbar">
+				<ul>
+<?
+			foreach($this->vars['nav_links'] as $tab => $tab_link) {
+?>
+					<li><a data-role="button" href="<?=$tab_link?>"><?=$tab?></a></li>
+<?
+			}
+?>
+				</ul>
+			</div>
+<?
+		}
+?>
+		</div>
+
     </div>
 </div>
 
@@ -82,6 +109,7 @@ if ( $template_area == 'top' ) {
 
     global $db, $dbw, $db_host, $dbw_host;
 ?>
+
 
 <!-- web: <?=$_SERVER['SERVER_ADDR']?> -->
 <!-- db:  <?= substr($db->host,0,strpos($db->host,'.')) ?> -->
