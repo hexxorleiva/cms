@@ -50,7 +50,7 @@ if ( $template_area == 'top' ) {
 <?
 		if($this->breadcrumb) {
 ?>
-		<a id="back_button" href="<?=$this->breadcrumb?>">Back</a>
+		<a href="<?=$this->breadcrumb?>">Back</a>
 <?
 		}
 ?>
@@ -63,28 +63,39 @@ if ( $template_area == 'top' ) {
 } else if ( $template_area == 'bottom' ) {
 
 ?>
-		<div data-role="footer">
+	</div><!-- end of "content" -->
+	<footer data-role="footer" data-position="fixed">
+		<nav data-role="navbar" data-iconpos="top">
 <?
 		if($this->footer_nav) {
 ?>
-			<div date-role="navbar">
-				<ul>
+			<ul>
 <?
 			foreach($this->vars['nav_links'] as $tab => $tab_link) {
+				switch($tab) {
+					case "Purchase":
+						$footer_nav_icon = 'purchase';
+						break;
+					default:
+						unset($footer_nav_icon);
+						break;
+				}
 ?>
-					<li><a data-role="button" href="<?=$tab_link?>"><?=$tab?></a></li>
+				<li><a id="<?=$tab?>" href="<?=$tab_link?>"><?=$tab?><span class="<?=$footer_nav_icon?>"></span></a></li>
 <?
 			}
 ?>
-				</ul>
-			</div>
+			</ul>
+<?
+		} else {
+?>
+			<div id="footer_cravetickets"> <?="&copy"?> Cravetickets <?=date("Y")?></div>
 <?
 		}
 ?>
-		</div>
-
-    </div>
-</div>
+		</nav>
+	</footer><!-- end of "footer" -->
+</div><!-- end of "page" -->
 
 <?php
     $css = array_diff($this->css, $this->css_added);

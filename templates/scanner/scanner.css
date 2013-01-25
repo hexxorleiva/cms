@@ -2,15 +2,15 @@
 	width: 320px;
 	height: 480px;
 }*/
-.top {
+/*.top {
 	height: 30px;
 	background-color: black;
-}
-.middle {
+}*/
+/*.middle {
 	height: 360px;
 	padding: 20px;
 	font-size: 18px;
-}
+}*/
 /*.footer_navigation {
 	height: 50px;
 	background-color: black;
@@ -40,11 +40,22 @@ div.footer_navigation ul li > a#activated {
 	background-color:#999;
 	color:black;
 }*/
-a#back_button {
+/*a#back_button {
 	position:relative;
 	top:5px;
 	left:15px;
 	color: red;
+}*/
+
+#footer_cravetickets {
+	padding: 10px 0;
+	text-align: center;
+}
+
+footer nav li a#Purchase span.purchase {
+	background: url('/cms/templates/scanner/images/credit_card.png') 50% 50% no-repeat;
+	background-size: 24px 24px;
+	z-index: 15;
 }
 
 #coming_soon {
