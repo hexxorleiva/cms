@@ -6,11 +6,11 @@ if ( $template_area == 'top' ) {
     
 
     $js = array(
+        '/templates/scanner/scanner.js',
 		'/lib/js/sky.utils.js',
         '/templates/html5/cms-html5.js',
         '/lib/js/aqlForm.js',
-        '/lib/js/jquery.livequery.min.js',
-        '/templates/scanner/scanner.js'
+        '/lib/js/jquery.livequery.min.js'
     );
 
     $this->template_js = array_merge($this->template_js, $js);
@@ -45,7 +45,7 @@ if ( $template_area == 'top' ) {
 
 </head>
 <body>
-<div data-role="page" data-title="<?=$p->title?>" data-theme="<?=$this->data_theme?$this->data_theme:'d'?>">
+<div data-role="page" data-title="<?=$p->title?>" data-theme="<?=$this->data_theme?$this->data_theme:'d'?>" id="<?=$this->tab?>">
     <div data-role="header">
         <?=$this->heading_left?$this->heading_left:''?>
 <?
