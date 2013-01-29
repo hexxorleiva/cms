@@ -1,18 +1,29 @@
-	// $(document).on('pagechange', function() {
-	// 	$('#change_promoter_login select').change(function() {
-	// 		ct_promoter_ide = $(this).val();
-	// 		redirect_location = '/scanner/events/?ct_promoter_ide=' + ct_promoter_ide;		
 
-	// 		location.href = redirect_location;
-	// 	});
-	// });
+//	The usage of this particular selector is to be able to detect which exact page we are on.
+//	Because jQuery mobile loads each external page into the DOM after the inital page
+//	We need to be constantly need to be using the '.live' event handler.
 
-$(document).delegate("#Events", "pageinit", function() {
-	console.log('Page with the #events id has been triggered through the pageinit event. This means if the first page is #Events, all functions below will trigger. It will not trigger if you return to the #events page.');
+$("div[data-role='page']").live('pagebeforeshow', function() {
+	var current_page = $.mobile.activePage.attr('id');
+	console.log('current page is: ' + current_page + ' and this is from the pageshow event.');
+
+	$("footer[data-role='footer'] a#" + current_page).addClass('ui-btn-active ui-state-persist');
+
 });
 
-$(document).on('pagechange', function(event) {
-	var current_page = $("div[data-role='page']").attr('id');
-	console.log($.mobile.activePage);
-	console.log('This page has been loaded ' + current_page);
+$("div[data-role='page']").live('pagebeforehide', function() {
+	var current_page = $.mobile.activePage.attr('id');
+	if($("footer[data-role='footer'] a#" + current_page).hasClass('ui-btn-active ui-state-persist')) {
+		$("footer[data-role='footer'] a#" + current_page).removeClass('ui-btn-active ui-state-persist');
+		console.log('removed footer from ' + current_page);
+	} else {
+		console.log('pagebeforehide, did not remove class.');
+	}
+});
+
+$('#Events').live('pageinit', function() {
+	$('#ct_promoter_selection').bind('change', function() {
+		console.log('there has been a change in the selection of the ct_promoter.');
+	});
+
 });

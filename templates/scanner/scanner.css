@@ -69,16 +69,20 @@ div.middle #welcome {
 	font-weight: bold;
 }
 
+/*	Slide Movements	*/
+.slide.in {
+	    -webkit-transform: translateX(0);
+	    -webkit-animation-name: slideinfromleft;
+	}
+
+.slide.out {
+    -webkit-transform: translateX(-100%);
+    -webkit-animation-name: slideouttoright;
+}
+	
+
 footer nav li a#Purchase span.purchase {
 	background: url('/templates/scanner/images/credit_card.png') 50% 50% no-repeat;
 	background-size: 24px 24px;
 	z-index: 15;
-}
-
-#coming_soon {
-	color: #333333;
-	height:100%;
-	width:100%;
-	font-size:24px;
-	padding: 120px 0;
 }

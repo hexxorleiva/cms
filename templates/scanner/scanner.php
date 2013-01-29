@@ -74,15 +74,28 @@ if ( $template_area == 'top' ) {
 <?
 			foreach($this->vars['nav_links'] as $tab => $tab_link) {
 				switch($tab) {
+					case "Scan":
+						$footer_nav_icon = 'scan';
+						$tab_name = 'Scan';
+						break;
 					case "Purchase":
 						$footer_nav_icon = 'purchase';
+						$tab_name = 'Purchase';
+						break;
+					case "GuestList":
+						$footer_nav_icon = 'guestlist';
+						$tab_name = 'Guest List';
+						break;
+					case "Info":
+						$footer_nav_icon = 'event';
+						$tab_name = 'Event';
 						break;
 					default:
 						unset($footer_nav_icon);
 						break;
 				}
 ?>
-				<li><a id="<?=$tab?>" href="<?=$tab_link?>"><?=$tab?><span class="<?=$footer_nav_icon?>"></span></a></li>
+				<li><a id="<?=$tab?>" href="<?=$tab_link?>"><?=$tab_name?><span class="<?=$footer_nav_icon?>"></span></a></li>
 <?
 			}
 ?>
