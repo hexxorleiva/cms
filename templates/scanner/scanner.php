@@ -95,7 +95,7 @@ if ( $template_area == 'top' ) {
 						break;
 				}
 ?>
-				<li><a id="<?=$tab?>" href="<?=$tab_link?>"><?=$tab_name?><span class="<?=$footer_nav_icon?>"></span></a></li>
+				<li><a id="<?=$tab?>" data-icon="<?=$footer_nav_icon?>" href="<?=$tab_link?>"><?=$tab_name?></a></li>
 <?
 			}
 ?>
