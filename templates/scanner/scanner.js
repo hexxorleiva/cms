@@ -7,7 +7,16 @@ $('#Events').live('pageinit', function() {
 	$('#ct_promoter_selection').bind('change', function() {
 		var ct_promoter = $(this).val();
 		
-		$.ajax({ url: '/scanner/ajax/ct-promoter-events?ct_promoter_ide='+ct_promoter});
+		$.post('/scanner/ajax/ct-promoter-events', ct_promoter, function(json) {
+			aql.json.handle(json, null, {
+				success: function() {
+					$('#ct_promoter_listings').text(json);
+				},
+				error: function() {
+					$('#ct_promoter_listings').text(json);
+				}
+			});
+		});
 		console.log('the new ct_promoter is: ' + ct_promoter);
 		
 	});
