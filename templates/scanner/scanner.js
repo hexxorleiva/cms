@@ -5,35 +5,22 @@
 
 //	When the basic page is set-up, we will be passing the following variables in-between all
 //	the different pages.
+var ct_event_ide;
+var ct_promoter_ide;
 
 $('#Events').live('pageinit', function() {
-	//	When the basic page is set-up, 
-	var market_ide;
+	//	When the page initalizes, hide any indication of the listings for the events
+	//	and the option to choose markets.
+	$('div#ct_promoter_listings_event').hide();
+	$('div#markets').hide();
 
-	//	When the page is initalized, hide all the promoter options for the user until they've
-	//	picked a market. After they have picked a market, show the option to change promoters
-	//	to carry over the variable of the market ide into the query for events.
-	$('div#change_promoter_login').hide();
+	//	Will check when the <select> for the promoter has changed
+	$('select#ct_promoter_selection').live('change', function() {
 
-	//	Will check when the <select> for the markets is changed
-	$('select#markets').live('change', function() {
-		//	Show the promoters <select>
-		$('div#change_promoter_login').show();
-		market_ide = $(this).val();
-		console.log('This market has been picked: ' + market_ide);
-	});
-	
-	//	Once the user picks their promoter, do the following:
-	//	1. Grab the ide value of that promoter from the list.
-	//	2. Send it to the ajax page below.
-	//	3. Ajax will return a json [object,Object] that will contain all of the information for the events
-	//	4. Parse the [object,Object] as a link value
-	$('select#ct_promoter_selection').bind('change', function() {
-		var ct_promoter = $(this).val();
-		
+		ct_promoter_ide = $(this).val();
+
 		var data = {
-			'ct_promoter_ide' : ct_promoter,
-			'market_ide' : market_ide
+			'ct_promoter_ide' : ct_promoter_ide
 		}
 
 		$.mobile.loading('show');
@@ -41,27 +28,92 @@ $('#Events').live('pageinit', function() {
 		$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
 			aql.json.handle(json, null, {
 				success: function() {
+					//	Create an empty array that'll be used to house all of the <option> elements
+					//	that will be received from the json object.
 					var holder = [];
-					var ct_event_id;
 
+					//	Show the container that will house all of the <option> elements.
+					$('div#markets').show();
+
+					holder.push('<option value="">Choose a market</option>');
+					//	Going through each json object, we will create an <option> html element
+					//	that will be added and then refreshed for the user to view the markets
+					//	available depending on which promoter was choosen.
 					$.each(json[0], function(key, val) {
-						holder.push('<a class="ui-link" href="/?ct_promoter_ide=' + val.ct_event_id + '">' + val.name + '</a>' + ' ' + val.date + '<br />' + '<strong>Address</strong>: ' + 
-						val.address1 + '<br />' + val.city + ', ' + val.state + ' ' + val.zip + '<br /><br />');
+						holder.push('<option value="' + val.market_ide + '">' + val.market_name + '</option>');
 					});
 
-					$('#ct_promoter_listings').append().html(holder.join(' '));
+					//	Append the <option> elements as html into the container.
+					$('div#markets select#markets').append().html(holder.join(' '));
+					$('div#markets select#markets').selectmenu('refresh');
+
 					$.mobile.loading('hide');
 				},
 				error: function() {
-					$('#ct_promoter_listings').text(json[0]);
+					$('div#markets').show();
+
+					$('div#markets select#markets').append().html('<option value=" " disabled="disabled">' + json[0] + '</option>');
+					$('div#markets select#markets').selectmenu('refresh');
+					//	Resetting the text within the <ul> text.
+					$('div#ct_promoter_listings_event').hide();
 					$.mobile.loading('hide');
 				}
 			
 			});
 		});
-		console.log('the new ct_promoter is: ' + ct_promoter);
-		
+
 	});
+
+	$('select#markets').bind('change', function() {
+		//	In case the user re-selects "Choose Markets", to hide any previous
+		//	event information that was aquired from a previous market.
+		if($(this).val().length < 1){
+			//	Resetting the text within the <ul> text.
+			$('div#ct_promoter_listings_event').hide();			
+		
+		} else {
+
+			var market_ide = $(this).val();
+			
+			var data = {
+				'ct_promoter_ide' : ct_promoter_ide,
+				'market_ide' : market_ide
+			}
+
+			$.mobile.loading('show');
+
+			$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
+				aql.json.handle(json, null, {
+					success: function() {
+						var holder = [];
+						
+						$('div#ct_promoter_listings_event').show();
+
+						$.each(json[0], function(key, val) {
+							holder.push('<li>' + '<a class="ui-link" href="/scanner/events/scan" ct_contract="">' + '<h2>' + val.name + '</h2>' + 
+								'<p class="listing-date">' + val.date + '</p>' + '<p class="listing-address">' + val.address1 + '<br />' + 
+								val.city + ', ' + val.state + ' ' + val.zip + '</p></a>' + '</li>');
+						});
+						
+						$('div#ct_promoter_listings_event').show();
+						$('div#ct_promoter_listings_event ul').append().html(holder.join(' '));
+						$('div#ct_promoter_listings_event ul').listview('refresh');
+
+						$.mobile.loading('hide');
+					},
+					error: function() {
+						$('div#ct_promoter_listings_event').show();
+						$('#ct_promoter_listings_event ul').text(json[0]);
+						$.mobile.loading('hide');
+					}
+				
+				});
+			});
+			console.log('the new market is: ' + market_ide + ' and loading it for this ct_promoter: ' + ct_promoter_ide);
+		}	
+	
+	});
+
 
 });
 

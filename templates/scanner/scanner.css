@@ -1,3 +1,7 @@
+h2.ui-li-heading {
+	padding:0px 0;
+}
+
 #footer_cravetickets {
 	padding: 10px 0;
 	text-align: center;
@@ -31,6 +35,11 @@ div.middle #welcome {
     -webkit-animation-name: slideouttoright;
 }
 
+div#ct_promoter_listings_event ul#listings {
+	position: relative;
+	top:10px;
+}
+
 .ui-icon-purchase {
 	background: url('/templates/scanner/images/credit_card.png') no-repeat;
     -moz-border-radius: 0px;
@@ -40,4 +49,22 @@ div.middle #welcome {
 	box-shadow: none;
 	width: 28px;
 	height: 28px;
+}
+
+.ui-listview-filter .ui-input-search {
+	margin: 15px 5px;
+}
+
+div.ui-input-search {
+	position:relative;
+	top:10px;
+}
+
+div#ct_promoter_listings_event ul#listings li p.listing-date {
+	font-size: 15px;
+	float:left;
+}
+
+div#ct_promoter_listings_event ul#listings li p.listing-address {
+	font-size:14px;
 }
