@@ -20,6 +20,7 @@ $('#Events').live('pageinit', function() {
 	}
 
 	$.mobile.loading('show');
+	$('div#ct_promoter_listings_event').hide();
 
 	$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
 		aql.json.handle(json, null, {
