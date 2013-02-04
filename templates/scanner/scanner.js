@@ -7,6 +7,7 @@
 //	the different pages.
 var ct_event_ide;
 var ct_promoter_ide;
+var ct_contract_ide;
 
 $('#Events').live('pageinit', function() {
 	//	When the page initalizes, hide any indication of the listings for the events
@@ -90,7 +91,7 @@ $('#Events').live('pageinit', function() {
 						$('div#ct_promoter_listings_event').show();
 
 						$.each(json[0], function(key, val) {
-							holder.push('<li>' + '<a class="ui-link" href="/scanner/events/scan" ct_contract="">' + '<h2>' + val.name + '</h2>' + 
+							holder.push('<li>' + '<a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
 								'<p class="listing-date">' + val.date + '</p>' + '<p class="listing-address">' + val.address1 + '<br />' + 
 								val.city + ', ' + val.state + ' ' + val.zip + '</p></a>' + '</li>');
 						});
@@ -110,13 +111,56 @@ $('#Events').live('pageinit', function() {
 				});
 			});
 			console.log('the new market is: ' + market_ide + ' and loading it for this ct_promoter: ' + ct_promoter_ide);
+		
 		}	
 	
+	});
+
+	$("ul#listings a.ui-link-inherit").live('click', function() {
+		ct_contract_ide = $(this).attr('ct_contract_ide');
+		console.log('This is the contact_ide for the specific event that was clicked on: ' + ct_contract_ide);
 	});
 
 
 });
 
+$('#Scan').live('pageinit', function() {
+	console.log('live from the scan page.');
+});
+
+$('#GuestList').live('pageinit', function() {
+
+	var data = {
+		'ct_contract_ide' : ct_contract_ide
+	}
+
+	// Post data for the guest-list
+	$.post('/scanner/ajax/guest-list', data, function(json) {
+		aql.json.handle(json, null, {
+				success: function() {
+					console.log(json[0]);
+					// var holder[];
+
+					// $.each(json[0], function(key, val) {
+					// 	holder.push('<li>' + '<a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
+					// 		'<p class="listing-date">' + val.date + '</p>' + '<p class="listing-address">' + val.address1 + '<br />' + 
+					// 		val.city + ', ' + val.state + ' ' + val.zip + '</p></a>' + '</li>');
+					// });					
+
+					// $('div.middle').append().html(holder.join(' '));
+
+				},
+				error: function() {
+					console.log('There was an error');
+				}
+			
+		});				
+	});
+	console.log('live from the guestlist page.');
+});
+
+//	Will constantly look at the data-role page attribute and if the footer exists,
+//	the footer nav-bar will select the correct button for the navigation.
 $("div[data-role='page']").live('pagebeforeshow', function() {
 	var current_page = $.mobile.activePage.attr('id');
 	console.log('current page is: ' + current_page + ' and this is from the pageshow event.');
