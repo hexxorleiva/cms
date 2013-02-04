@@ -13,8 +13,52 @@ $('#Events').live('pageinit', function() {
 	//	When the page initalizes, hide any indication of the listings for the events
 	//	and the option to choose markets.
 	$('div#ct_promoter_listings_event').hide();
-	$('div#markets').hide();
 
+
+	//	When the page is loaded initally, to grab the ct_promoter that is in the selector
+	//	and then send that information to ajax page /scanner/ajax/ct-promoter-events.php
+	//	and bring back all the information on all the events.
+	ct_promoter_ide = $('select#ct_promoter_selection').val();
+
+	var data = {
+		'ct_promoter_ide' : ct_promoter_ide
+	}
+
+	$.mobile.loading('show');
+
+	$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
+		aql.json.handle(json, null, {
+			success: function() {
+				var holder = [];
+				var date;
+
+				$('div#ct_promoter_listings_event').show();
+
+				$.each(json[0], function(key, val) {
+					//	Make a divider based on the date
+					if(date != val.date) {
+						date = val.date;
+						console.log(date);
+						holder.push('<li data-role="list-divider">' + date + '</li>');
+					}
+					holder.push('<li><a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
+					'<p class="listing-date">' + val.date + '</p>' + '</a>' + '</li>');
+				});
+				
+				$('div#ct_promoter_listings_event ul#listings').append().html(holder.join(' '));
+				$('div#ct_promoter_listings_event ul#listings').listview('refresh');
+
+				$.mobile.loading('hide');
+			},
+			error: function() {
+				$('div#ct_promoter_listings_event').show();
+				$('#ct_promoter_listings_event ul').text(json[0]);
+				$.mobile.loading('hide');
+			}
+		
+		});
+	});
+	
 	//	Will check when the <select> for the promoter has changed
 	$('select#ct_promoter_selection').live('change', function() {
 
@@ -24,96 +68,41 @@ $('#Events').live('pageinit', function() {
 			'ct_promoter_ide' : ct_promoter_ide
 		}
 
-		$.mobile.loading('show');
+		$.mobile.loading('show');		
 
 		$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
 			aql.json.handle(json, null, {
 				success: function() {
-					//	Create an empty array that'll be used to house all of the <option> elements
-					//	that will be received from the json object.
 					var holder = [];
+					var date;
+										
+					$('div#ct_promoter_listings_event').show();
 
-					//	Show the container that will house all of the <option> elements.
-					$('div#markets').show();
-
-					holder.push('<option value="">Choose a market</option>');
-					//	Going through each json object, we will create an <option> html element
-					//	that will be added and then refreshed for the user to view the markets
-					//	available depending on which promoter was choosen.
 					$.each(json[0], function(key, val) {
-						holder.push('<option value="' + val.market_ide + '">' + val.market_name + '</option>');
-					});
-
-					//	Append the <option> elements as html into the container.
-					$('div#markets select#markets').append().html(holder.join(' '));
-					$('div#markets select#markets').selectmenu('refresh');
+					//	Make a divider based on the date
+					if(date != val.date) {
+						date = val.date;
+						console.log(date);
+						holder.push('<li data-role="list-divider">' + date + '</li>');
+					}
+					holder.push('<li><a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
+					'<p class="listing-date">' + val.date + '</p>' + '</a>' + '</li>');
+				});
+					
+					$('div#ct_promoter_listings_event ul').append().html(holder.join(' '));
+					$('div#ct_promoter_listings_event ul').listview('refresh');
 
 					$.mobile.loading('hide');
 				},
 				error: function() {
-					$('div#markets').show();
-
-					$('div#markets select#markets').append().html('<option value=" " disabled="disabled">' + json[0] + '</option>');
-					$('div#markets select#markets').selectmenu('refresh');
-					//	Resetting the text within the <ul> text.
-					$('div#ct_promoter_listings_event').hide();
+					$('div#ct_promoter_listings_event').show();
+					$('#ct_promoter_listings_event ul').text(json[0]);
 					$.mobile.loading('hide');
 				}
 			
 			});
 		});
 
-	});
-
-	$('select#markets').bind('change', function() {
-		//	In case the user re-selects "Choose Markets", to hide any previous
-		//	event information that was aquired from a previous market.
-		if($(this).val().length < 1){
-			//	Resetting the text within the <ul> text.
-			$('div#ct_promoter_listings_event').hide();			
-		
-		} else {
-
-			var market_ide = $(this).val();
-			
-			var data = {
-				'ct_promoter_ide' : ct_promoter_ide,
-				'market_ide' : market_ide
-			}
-
-			$.mobile.loading('show');
-
-			$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
-				aql.json.handle(json, null, {
-					success: function() {
-						var holder = [];
-						
-						$('div#ct_promoter_listings_event').show();
-
-						$.each(json[0], function(key, val) {
-							holder.push('<li>' + '<a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
-								'<p class="listing-date">' + val.date + '</p>' + '<p class="listing-address">' + val.address1 + '<br />' + 
-								val.city + ', ' + val.state + ' ' + val.zip + '</p></a>' + '</li>');
-						});
-						
-						$('div#ct_promoter_listings_event').show();
-						$('div#ct_promoter_listings_event ul').append().html(holder.join(' '));
-						$('div#ct_promoter_listings_event ul').listview('refresh');
-
-						$.mobile.loading('hide');
-					},
-					error: function() {
-						$('div#ct_promoter_listings_event').show();
-						$('#ct_promoter_listings_event ul').text(json[0]);
-						$.mobile.loading('hide');
-					}
-				
-				});
-			});
-			console.log('the new market is: ' + market_ide + ' and loading it for this ct_promoter: ' + ct_promoter_ide);
-		
-		}	
-	
 	});
 
 	$("ul#listings a.ui-link-inherit").live('click', function() {
