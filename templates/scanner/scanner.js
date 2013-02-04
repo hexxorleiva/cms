@@ -10,11 +10,6 @@ var ct_promoter_ide;
 var ct_contract_ide;
 
 $('#Events').live('pageinit', function() {
-	//	When the page initalizes, hide any indication of the listings for the events
-	//	and the option to choose markets.
-	$('div#ct_promoter_listings_event').hide();
-
-
 	//	When the page is loaded initally, to grab the ct_promoter that is in the selector
 	//	and then send that information to ajax page /scanner/ajax/ct-promoter-events.php
 	//	and bring back all the information on all the events.
@@ -61,6 +56,9 @@ $('#Events').live('pageinit', function() {
 	
 	//	Will check when the <select> for the promoter has changed
 	$('select#ct_promoter_selection').live('change', function() {
+		//	When the page initalizes, hide any indication of the listings for the events
+		//	and the option to choose markets.
+		$('div#ct_promoter_listings_event').hide();
 
 		ct_promoter_ide = $(this).val();
 
@@ -68,14 +66,14 @@ $('#Events').live('pageinit', function() {
 			'ct_promoter_ide' : ct_promoter_ide
 		}
 
-		$.mobile.loading('show');		
+		$.mobile.loading('show');
 
 		$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
 			aql.json.handle(json, null, {
 				success: function() {
 					var holder = [];
 					var date;
-										
+
 					$('div#ct_promoter_listings_event').show();
 
 					$.each(json[0], function(key, val) {
