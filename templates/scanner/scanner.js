@@ -56,7 +56,7 @@ $('#Events').live('pageinit', function() {
 			if(market != val.market) {
 				market = val.market;
 				console.log('Got the market : ' + market);
-				holder.push('<li data-role="list-divider" data-theme="b">' + market + '</li>');
+				holder.push('<li data-role="list-divider">' + market + '</li>');
 			}
 
 			//	Go through each event that is returned from the json response from the ajax page and format it to be displayed on the page
