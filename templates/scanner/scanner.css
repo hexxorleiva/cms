@@ -1,5 +1,6 @@
 h2.ui-li-heading {
 	padding:0px 0;
+	font-size:14px;
 }
 
 #footer_cravetickets {
@@ -67,4 +68,16 @@ div#ct_promoter_listings_event ul#listings li p.listing-date {
 
 div#ct_promoter_listings_event ul#listings li p.listing-address {
 	font-size:14px;
+}
+
+div.middle div#changing_days_nav {
+	display:block;
+}
+
+div.middle div#changing_days_nav div#previousday {
+	float:left;
+}
+
+div.middle div#changing_days_nav div#nextday {
+	float:right;
 }
