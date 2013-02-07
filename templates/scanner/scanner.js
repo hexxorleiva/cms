@@ -39,6 +39,7 @@ $('#Events').live('pageinit', function() {
 			//	global variable num_of_event_days equals the maximum number of event days possible.
 			num_of_event_days = val.num_of_event_days;
 
+			console.log('successfully loaded from the ajax, here is the result : ' + val.date);
 			//	Make a divider based on the date
 			if(date != val.date) {
 				date = val.date;
