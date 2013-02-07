@@ -65,6 +65,9 @@ if ( $template_area == 'top' ) {
 
 ?>
 	</div><!-- end of "content" -->
+
+	<div style="text-align:center;"><?=$_SERVER['REQUEST_URI'] ?></div>
+
 	<footer data-role="footer" data-position="fixed">
 		<nav data-role="navbar" data-iconpos="top">
 <?

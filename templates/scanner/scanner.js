@@ -35,6 +35,7 @@ $('#Events').live('pageinit', function() {
 	function load_event_information(json_result) {
 		var holder = [];
 		var date;
+		var market;
 		$.each(json_result, function(key, val) {
 			//	global variable num_of_event_days equals the maximum number of event days possible.
 			num_of_event_days = val.num_of_event_days;
@@ -43,12 +44,24 @@ $('#Events').live('pageinit', function() {
 			//	Make a divider based on the date
 			if(date != val.date) {
 				date = val.date;
+				var date_div = $('.middle div#event_date');
 				console.log(date);
-				holder.push('<li data-role="list-divider">All Events for : ' + date + '</li>');
+				date_div.text(date);
+				if (date_div.is(":hidden")) {
+					date_div.show();
+				}
 			}
+
+			//	Make a divider based on the market
+			if(market != val.market) {
+				market = val.market;
+				console.log('Got the market : ' + market);
+				holder.push('<li data-role="list-divider" data-theme="b">' + market + '</li>');
+			}
+
 			//	Go through each event that is returned from the json response from the ajax page and format it to be displayed on the page
 			holder.push('<li><a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
-			'<p class="listing-date">' + val.date + '</p>' + '</a>' + '</li>');
+			'</a>' + '</li>');
 		});
 		
 		$('div#ct_promoter_listings_event ul').append().html(holder.join(' '));
@@ -130,6 +143,11 @@ $('#Events').live('pageinit', function() {
 	 *
 	 */
 	function hide_daynav_listview() {
+
+		if ($('.middle div#event_date').is(":visible")) {
+			$('.middle div#event_date').hide();
+		}
+
 		if ($('div#ct_promoter_listings_event').is(":visible")) {
 			$('div#ct_promoter_listings_event').hide();
 		}
