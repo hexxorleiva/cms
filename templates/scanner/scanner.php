@@ -55,7 +55,7 @@ if ( $template_area == 'top' ) {
 <?
 		}
 ?>
-        <h1><?=$_SERVER['REQUEST_URI'] ?></h1>
+        <h1><?=$this->heading?$this->heading:$this->title?></h1>
     </div> 
     <div data-role="content" > 
         
