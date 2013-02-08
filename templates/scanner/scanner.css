@@ -1,6 +1,6 @@
 h2.ui-li-heading {
 	padding:0px 0;
-	font-size:10px;
+	font-size:11px;
 }
 
 #footer_cravetickets {
@@ -14,9 +14,9 @@ div.middle {
 
 /*	Slide Movements	*/
 .slide.in {
-	    -webkit-transform: translateX(0);
-	    -webkit-animation-name: slideinfromleft;
-	}
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: slideinfromleft;
+}
 
 .slide.out {
     -webkit-transform: translateX(-100%);
