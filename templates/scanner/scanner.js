@@ -244,7 +244,8 @@ $('#Events').live('pageinit', function() {
 		ct_promoter_ide = $(this).val();
 
 		var data = {
-			'ct_promoter_ide' : ct_promoter_ide
+			'ct_promoter_ide' : ct_promoter_ide,
+			'random' : Math.random()
 		}
 
 		$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
