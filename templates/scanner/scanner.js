@@ -131,7 +131,7 @@ $('#Events').live('pageinit', function() {
 
 		$('#ct_promoter_listings_event ul').text(json_result);
 
-		console.log('There was an issue trying to render out the information.');
+		console.log('There was an issue trying to render out the information. This was the error : ' + json_result);
 
 		$.mobile.loading('hide');
 	}
