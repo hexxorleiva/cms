@@ -8,6 +8,8 @@
 var ct_event_ide;
 var ct_promoter_ide;
 var ct_contract_ide;
+var next_day_event;
+var previous_day_event;
 
 $('#Events').live('pageinit', function() {
 	//	When the page is loaded initally, grab the ct_promoter that is in the selector
@@ -15,12 +17,9 @@ $('#Events').live('pageinit', function() {
 	//	and bring back all the information on all the events.
 	ct_promoter_ide = $('select#ct_promoter_selection').val();
 
-	//	Variable set-up to grab upon the inital grabbing of events, to place a limit on how many times into
-	//	the future or the past we can go using the "next day" and "previous day" buttons.
-	var num_of_event_days;
-
 	var data = {
-		'ct_promoter_ide' : ct_promoter_ide
+		'ct_promoter_ide' : ct_promoter_ide,
+		'random' : Math.random()
 	}
 
 	$.mobile.loading('show');
@@ -37,25 +36,35 @@ $('#Events').live('pageinit', function() {
 		var date;
 		var market;
 		$.each(json_result, function(key, val) {
-			//	global variable num_of_event_days equals the maximum number of event days possible.
-			num_of_event_days = val.num_of_event_days;
-
-			console.log('successfully loaded from the ajax, here is the result : ' + val.date);
 			//	Make a divider based on the date
 			if(date != val.date) {
 				date = val.date;
 				var date_div = $('.middle div#event_date');
-				console.log(date);
 				date_div.text(date);
+
 				if (date_div.is(":hidden")) {
 					date_div.show();
 				}
 			}
 
+			if(next_day_event != val.next_day) {
+				next_day_event = val.next_day;
+				next_day_button(next_day_event);
+			}
+
+			if(previous_day_event != val.previous_day) {
+				previous_day_event = val.previous_day;
+				previous_day_button(previous_day_event);
+			}
+
+			if(val.ct_contract_ide == undefined) {
+				holder.push('<li><h2>' + val.name + '</h2></li>');
+				return;
+			}
+
 			//	Make a divider based on the market
 			if(market != val.market) {
 				market = val.market;
-				console.log('Got the market : ' + market);
 				holder.push('<li data-role="list-divider">' + market + '</li>');
 			}
 
@@ -97,12 +106,8 @@ $('#Events').live('pageinit', function() {
 		//	If the promoter only has one day's worth of events, immediately hide the "nextday" button
 		//	to prevent any issues, otherwise use to hide the next day button once you've reached the maximum
 		//	number of events.
-		if(num_of_event_days == $('div#changing_days_nav div#nextday a').attr('value')) {
-			$('div#changing_days_nav div#nextday').hide();
-		} else {
-			if($('div#changing_days_nav div#nextday').is(":hidden")) {
-				$('div#changing_days_nav div#nextday').show();
-			}
+		if($('div#changing_days_nav div#nextday').is(":hidden")) {
+			$('div#changing_days_nav div#nextday').show();
 		}
 
 		$.mobile.loading('hide');
@@ -172,51 +177,57 @@ $('#Events').live('pageinit', function() {
 		
 		hide_daynav_listview();
 
-		$('div#changing_days_nav div#nextday a').attr('value', function(i,val) {
-			return val.replace($('div#changing_days_nav div#nextday a').attr('value'), 1);
+		$('div#changing_days_nav div#nextday a').attr('event-date', function(i,val) {
+			return val.replace($('div#changing_days_nav div#nextday a').attr('event-date'), '');
 		});
 
-		$('div#changing_days_nav div#previousday a').attr('value', function(i,val) {
-			return val.replace($('div#changing_days_nav div#previousday a').attr('value'), 0);
+		$('div#changing_days_nav div#previousday a').attr('event-date', function(i,val) {
+			return val.replace($('div#changing_days_nav div#previousday a').attr('event-date'), '');
 		});
 	}
 
 	/**
-	 * Adds and subtracts the values within the previous/next day buttons that are
-	 * passed into the index value of the $ct_event_unique_dates array that contains
-	 * all possible dates within it. The $ct_event_unique_dates is located on the ajax
-	 * page that is getting the information.
+	 * Whenever the event date is passed from the ajax, change it so that the next/previous buttons
+	 * contain that date. The ajax will then correctly display back the dates depending on which button
+	 * was pressed.
 	 *
-	 * @param string date_nav_button
-	 * @param int nav_counter
+	 * @param string event_date
 	 *
 	 */
-	function date_nav_buttons(date_nav_button, nav_counter) {
-		if(date_nav_button == 'nextday') {
-
-			$("div#changing_days_nav div#" + date_nav_button + " a").attr('value', function(i,val) {
-				return val.replace($("div#changing_days_nav div#" + date_nav_button + " a").attr('value'), nav_counter);
-			});
-
-			nav_counter = nav_counter - 1;
-
-			$("div#changing_days_nav div#previousday a").attr('value', function(i,val) {
-				return val.replace($("div#changing_days_nav div#previousday a").attr('value'), nav_counter);
-			});
-
-		} else if(date_nav_button == 'previousday') {
-
-			$("div#changing_days_nav div#" + date_nav_button + " a").attr('value', function(i,val) {
-				return val.replace($("div#changing_days_nav div#" + date_nav_button + " a").attr('value'), nav_counter);
-			});
-
-			nav_counter = nav_counter + 1;
-
-			$("div#changing_days_nav div#nextday a").attr('value', function(i,val) {
-				return val.replace($("div#changing_days_nav div#nextday a").attr('value'), nav_counter);
-			});
-		}
+	function next_day_button(event_date) {
+		$("div#changing_days_nav div#nextday a").attr('event-date', function(i,val) {
+			return val.replace($("div#changing_days_nav div#nextday a").attr('event-date'), event_date);
+		});
 	}
+
+	function previous_day_button(event_date) {
+		$("div#changing_days_nav div#previousday a").attr('event-date', function(i,val) {
+			return val.replace($("div#changing_days_nav div#previousday a").attr('event-date'), event_date);
+		});		
+	}
+
+	// function date_nav_buttons(button, event_date) {
+
+	// 	if(button == "nextday") {
+	// 		$("div#changing_days_nav div#" + button + " a").attr('event_date', function(i,val) {
+	// 			return val.replace($("div#changing_days_nav div#" + button + " a").attr('event_date'), event_date);
+	// 		});
+
+	// 		$("div#changing_days_nav div#previousday a").attr('value', function(i,val) {
+	// 			return val.replace($("div#changing_days_nav div#previousday a").attr('value'), event_date);
+	// 		});
+
+	// 	} else if (button == "previousday") {
+	// 		$("div#changing_days_nav div#" + button + " a").attr('event_date', function(i,val) {
+	// 			return val.replace($("div#changing_days_nav div#" + button + " a").attr('event_date'), event_date);
+	// 		});
+
+	// 		$("div#changing_days_nav div#nextday a").attr('value', function(i,val) {
+	// 			return val.replace($("div#changing_days_nav div#nextday a").attr('value'), event_date);
+	// 		});
+
+	// 	}
+	// }
 
 	//	We are hiding all the elements that are automatically loaded into the php page due to how jQuery mobile automatically renders all of the page
 	//	with added classes, instead of having to re-add these classes later on, we can get jQuery to format all of the links, listviews for us at first
@@ -243,6 +254,7 @@ $('#Events').live('pageinit', function() {
 
 		ct_promoter_ide = $(this).val();
 
+		//	Math random is added to keep the webapp from caching the page.
 		var data = {
 			'ct_promoter_ide' : ct_promoter_ide,
 			'random' : Math.random()
@@ -280,38 +292,30 @@ $('#Events').live('pageinit', function() {
 
 	//	Section for the "Next Day" button
 	$('div#changing_days_nav div#nextday a').live('tap', function()	{
-
-		//	Used to grab the value that the "nextday" button currently has and 
-		//	turns it into an integer with the *1 to the value.
-		var nextday_counter = $(this).attr('value')*1;
-
-		//	+1 to the index value to move where in the array we are in the ajax page along the
-		//	array that contains all the unique dates.
-		nextday_counter = nextday_counter + 1;
-
-		console.log('The nextday_counter after +1 = ' + nextday_counter);
+		var next_event_date = $(this).attr('event-date');
 
 		$.mobile.loading('show');
 
 		hide_daynav_listview();
 
+		//	Passing the ct_promoter_ide and the date that is currently on the page.
+		//	Because the variable that is being passed is 'next_day' the ajax will return
+		//	the next events that are later than that date.
 		var data = {
 			'ct_promoter_ide' : ct_promoter_ide,
-			'next_day' : nextday_counter
+			'next_day_date' : next_event_date
 		}
 
 		$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
 			aql.json.handle(json, null, {
 				success: function() {
-					//	Use this function to increment or decrement the index value that is being passed
-					//	into the ajax page that will be determining the position in the array that
-					//	will showcase the date. 
-					date_nav_buttons('nextday', nextday_counter);
+
+					load_event_information(json[0]);
 
 					//	If we have reached the maximum elements in the array that contain all of the dates
 					//	then we want the user to no longer be able to continue forward, so we hide the nextday
 					//	button. Otherwise we bring it back.
-					if((num_of_event_days - 1) == $('div#changing_days_nav div#nextday a').attr('value')) {
+					if($('div#changing_days_nav div#nextday a').attr('event-date') == '') {
 						$('div#changing_days_nav div#nextday').hide();
 					} else {
 						if($('div#changing_days_nav div#nextday').is(":hidden")) {
@@ -327,8 +331,6 @@ $('#Events').live('pageinit', function() {
 						$('div#changing_days_nav div#previousday').show();
 					}
 
-					load_event_information(json[0]);
-
 					$.mobile.loading('hide');
 				},
 				error: function() {
@@ -339,13 +341,7 @@ $('#Events').live('pageinit', function() {
 	});
 
 	$('div#changing_days_nav div#previousday a').live('tap', function()	{
-		var previousday_counter = $(this).attr('value')*1;
-		
-		//	-1 to the index value to move where in the array we are in the ajax page along the
-		//	array that contains all the unique dates.
-		previousday_counter = previousday_counter - 1;
-
-		console.log('The previousday_counter after 1 has been added ' + previousday_counter);
+		var previous_event_date = $(this).attr('event-date');
 
 		$.mobile.loading('show');
 
@@ -353,21 +349,16 @@ $('#Events').live('pageinit', function() {
 
 		var data = {
 			'ct_promoter_ide' : ct_promoter_ide,
-			'next_day' : previousday_counter
+			'previous_day_date' : previous_event_date
 		}
 
 		$.post('/scanner/ajax/ct-promoter-events', data, function(json) {
 			aql.json.handle(json, null, {
 				success: function() {
-					//	Use this function to increment or decrement the index value that is being passed
-					//	into the ajax page that will be determining the position in the array that
-					//	will showcase the date. 
-					date_nav_buttons('previousday', previousday_counter);
 
-					//	If we have reached the maximum elements in the array that contain all of the dates
-					//	then we want the user to no longer be able to continue forward, so we hide the nextday
-					//	button. Otherwise we bring it back.
-					if($('div#changing_days_nav div#previousday a').attr('value') == 0) {
+					load_event_information(json[0]);
+
+					if($('div#changing_days_nav div#previousday a').attr('event-date') == '') {
 						$('div#changing_days_nav div#previousday').hide();
 					} else {
 						if($('div#changing_days_nav div#previousday').is(":hidden")) {
@@ -382,8 +373,6 @@ $('#Events').live('pageinit', function() {
 					if ($('div#ct_promoter_listings_event').is(":hidden")) {
 						$('div#ct_promoter_listings_event').show();
 					}
-
-					load_event_information(json[0]);
 
 					$.mobile.loading('hide');
 				},
@@ -407,10 +396,10 @@ $('#GuestList').live('pageinit', function() {
 	}
 
 	// Post data for the guest-list
-	$.post('/scanner/ajax/guest-list', data, function(json) {
-		aql.json.handle(json, null, {
-				success: function() {
-					console.log(json[0]);
+	// $.post('/scanner/ajax/guest-list', data, function(json) {
+	// 	aql.json.handle(json, null, {
+	// 			success: function() {
+	// 				console.log(json[0]);
 					// var holder[];
 
 					// $.each(json[0], function(key, val) {
@@ -421,13 +410,13 @@ $('#GuestList').live('pageinit', function() {
 
 					// $('div.middle').append().html(holder.join(' '));
 
-				},
-				error: function() {
-					console.log('There was an error');
-				}
+	// 			},
+	// 			error: function() {
+	// 				console.log('There was an error');
+	// 			}
 			
-		});				
-	});
+	// 	});				
+	// });
 	console.log('live from the guestlist page.');
 });
 
