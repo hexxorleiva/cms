@@ -392,7 +392,8 @@ $('#Scan').live('pageinit', function() {
 $('#GuestList').live('pageinit', function() {
 
 	var data = {
-		'ct_contract_ide' : ct_contract_ide
+		'ct_contract_ide' : ct_contract_ide,
+		'random' : Math.random()
 	}
 
 	// Post data for the guest-list
