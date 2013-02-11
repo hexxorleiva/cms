@@ -11,7 +11,7 @@ var ct_contract_ide;
 var next_day_event;
 var previous_day_event;
 
-$('#Events').live('pageinit', function() {
+$('#Events').live('pagebeforeshow', function() {
 	//	When the page is loaded initally, grab the ct_promoter that is in the selector
 	//	and then send that information to ajax page /scanner/ajax/ct-promoter-events.php
 	//	and bring back all the information on all the events.
@@ -134,7 +134,11 @@ $('#Events').live('pageinit', function() {
 			$('div#ct_promoter_listings_event').show();
 		}
 
-		$('#ct_promoter_listings_event ul').text(json_result);
+		var holder = [];
+		//	Go through each event that is returned from the json response from the ajax page and format it to be displayed on the page
+		holder.push('<li>This Promoter has No Upcoming Events</li>');
+		$('div#ct_promoter_listings_event ul').append().html(holder.join(' '));
+		$('div#ct_promoter_listings_event ul').listview('refresh');
 
 		console.log('There was an issue trying to render out the information. This was the error : ' + json_result);
 
@@ -177,13 +181,13 @@ $('#Events').live('pageinit', function() {
 		
 		hide_daynav_listview();
 
-		$('div#changing_days_nav div#nextday a').attr('event-date', function(i,val) {
-			return val.replace($('div#changing_days_nav div#nextday a').attr('event-date'), '');
-		});
+		// $('div#changing_days_nav div#nextday a').attr('event-date', function(i,val) {
+		// 	return val.replace($('div#changing_days_nav div#nextday a').attr('event-date'), '-');
+		// });
 
-		$('div#changing_days_nav div#previousday a').attr('event-date', function(i,val) {
-			return val.replace($('div#changing_days_nav div#previousday a').attr('event-date'), '');
-		});
+		// $('div#changing_days_nav div#previousday a').attr('event-date', function(i,val) {
+		// 	return val.replace($('div#changing_days_nav div#previousday a').attr('event-date'), '-');
+		// });
 	}
 
 	/**
@@ -279,6 +283,7 @@ $('#Events').live('pageinit', function() {
 	//	need it.
 	$("ul#listings a.ui-link-inherit").live('click', function() {
 		ct_contract_ide = $(this).attr('ct_contract_ide');
+
 		console.log('This is the contact_ide for the specific event that was clicked on: ' + ct_contract_ide);
 	});
 
@@ -391,33 +396,38 @@ $('#Scan').live('pageinit', function() {
 
 $('#GuestList').live('pageinit', function() {
 
-	var data = {
-		'ct_contract_ide' : ct_contract_ide,
-		'random' : Math.random()
+	function will_call_list(json_result) {
+		var holder = [];
+		holder.push('<table><tr><th>Last Name</th><th>First Name</th><th>Quantity</th><th>Ticket</th></tr>');
+		$.each(json_result, function(key, val) {
+			console.log(json_result);
+			holder.push('<tr><td>' + val.lname + '</td>' + '<td>' + val.fname + '</td><td>' + val.quantity + '</td><td>' + val.ticket + '</td></tr>'); 
+		});
+		holder.push('</table>');
+		$('div#guestlist').append().html(holder.join(' '));
 	}
 
+	var data = {
+		'ct_contract_ide' : ct_contract_ide
+	}
+	console.log('From the guest list, this is the ct_contract_ide ' + ct_contract_ide);
 	// Post data for the guest-list
-	// $.post('/scanner/ajax/guest-list', data, function(json) {
-	// 	aql.json.handle(json, null, {
-	// 			success: function() {
-	// 				console.log(json[0]);
-					// var holder[];
-
-					// $.each(json[0], function(key, val) {
-					// 	holder.push('<li>' + '<a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
-					// 		'<p class="listing-date">' + val.date + '</p>' + '<p class="listing-address">' + val.address1 + '<br />' + 
-					// 		val.city + ', ' + val.state + ' ' + val.zip + '</p></a>' + '</li>');
-					// });					
-
-					// $('div.middle').append().html(holder.join(' '));
-
-	// 			},
-	// 			error: function() {
-	// 				console.log('There was an error');
-	// 			}
-			
-	// 	});				
-	// });
+	$.post('/scanner/ajax/guest-list', data, function(json) {
+		aql.json.handle(json, null, {
+			success: function() {
+				console.log(json[0]);
+				if(json[0] == null) {
+					$('div#guestlist').text('There was an error returning any guests for this event');
+				} else {
+					will_call_list(json[0]);
+				}
+			},
+			error: function() {
+				console.log(json[0]);
+				$('div#guestlist').text('There was an error loading the guest list.');
+			}
+		});				
+	});
 	console.log('live from the guestlist page.');
 });
 
@@ -425,8 +435,5 @@ $('#GuestList').live('pageinit', function() {
 //	the footer nav-bar will select the correct button for the navigation.
 $("div[data-role='page']").live('pagebeforeshow', function() {
 	var current_page = $.mobile.activePage.attr('id');
-	console.log('current page is: ' + current_page + ' and this is from the pageshow event.');
-
 	$("footer[data-role='footer'] a#" + current_page).addClass('ui-btn-active ui-state-persist');
-
 });

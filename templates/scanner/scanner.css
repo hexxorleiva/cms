@@ -87,3 +87,20 @@ div.middle div#changing_days_nav div#previousday {
 div.middle div#changing_days_nav div#nextday {
 	float:right;
 }
+
+div.middle table {
+	width: 100%;
+	margin:0 auto;
+}
+
+div.middle div#guestlist table tr th {
+	font-size: 12px;
+	padding: 10px;
+	border-bottom: solid 1px black;
+}
+
+div.middle div#guestlist table td {
+	font-size: 14px;
+	padding: 5px;
+	border-bottom: solid 1px black;
+}
