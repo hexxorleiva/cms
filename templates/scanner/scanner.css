@@ -28,6 +28,9 @@ div#ct_promoter_listings_event ul#listings {
 	top:10px;
 }
 
+
+/* Footer Icons */
+
 .ui-icon-purchase {
 	background: url('/templates/scanner/images/credit_card.png') no-repeat;
     -moz-border-radius: 0px;
@@ -37,6 +40,51 @@ div#ct_promoter_listings_event ul#listings {
 	box-shadow: none;
 	width: 28px;
 	height: 28px;
+}
+
+.ui-icon-scan {
+	background: url('/templates/scanner/images/barcode.png') no-repeat;
+    -moz-border-radius: 0px;
+    -webkit-border-radius:0px;
+    border-radius:0px;
+	background-color: transparent;
+	box-shadow: none;
+	width: 28px;
+	height: 28px;
+}
+
+.ui-icon-guestlist {
+	background: url('/templates/scanner/images/guest_list.png') no-repeat;
+    -moz-border-radius: 0px;
+    -webkit-border-radius:0px;
+    border-radius:0px;
+	background-color: transparent;
+	box-shadow: none;
+	width: 28px;
+	height: 28px;
+}
+
+.ui-icon-event {
+	background: url('/templates/scanner/images/event_info.png') no-repeat;
+    -moz-border-radius: 0px;
+    -webkit-border-radius:0px;
+    border-radius:0px;
+	background-color: transparent;
+	box-shadow: none;
+	width: 28px;
+	height: 28px;
+}
+
+footer.ui-footer ul li a#Purchase span.ui-icon-purchase {
+	margin-left: -12px;
+}
+
+footer.ui-footer ul li a#Scan span.ui-icon-scan, footer.ui-footer ul li a#Info span.ui-icon-event {
+	margin-left: -11px;
+}
+
+footer.ui-footer ul li a#GuestList span.ui-icon-guestlist {
+	margin-left: -5px;
 }
 
 .ui-listview-filter .ui-input-search {

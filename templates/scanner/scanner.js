@@ -88,7 +88,6 @@ $('#Events').live('pageinit', function() {
 	 *
 	 */
 	function refresh_front_page(json_result) {
-
 		if ($('div#ct_promoter_listings_event').is(":hidden")) {
 			$('div#ct_promoter_listings_event').show();
 		}
@@ -111,7 +110,6 @@ $('#Events').live('pageinit', function() {
 		}
 
 		$.mobile.loading('hide');
-
 	}
 
 	/**
@@ -147,9 +145,8 @@ $('#Events').live('pageinit', function() {
 
 	/**
 	 * When switching promoters or loading the page for the first time
-	 * hide all elements until the page gets an ajax response to 
+	 * hide all elements until the page gets a successful ajax response to 
 	 * load the rest of the page.
-	 *
 	 */
 	function hide_daynav_listview() {
 
@@ -176,18 +173,8 @@ $('#Events').live('pageinit', function() {
 	 *
 	 */
 	function changing_promoters() {
-
 		$.mobile.loading('show');
-		
 		hide_daynav_listview();
-
-		// $('div#changing_days_nav div#nextday a').attr('event-date', function(i,val) {
-		// 	return val.replace($('div#changing_days_nav div#nextday a').attr('event-date'), '-');
-		// });
-
-		// $('div#changing_days_nav div#previousday a').attr('event-date', function(i,val) {
-		// 	return val.replace($('div#changing_days_nav div#previousday a').attr('event-date'), '-');
-		// });
 	}
 
 	/**
@@ -209,29 +196,6 @@ $('#Events').live('pageinit', function() {
 			return val.replace($("div#changing_days_nav div#previousday a").attr('event-date'), event_date);
 		});		
 	}
-
-	// function date_nav_buttons(button, event_date) {
-
-	// 	if(button == "nextday") {
-	// 		$("div#changing_days_nav div#" + button + " a").attr('event_date', function(i,val) {
-	// 			return val.replace($("div#changing_days_nav div#" + button + " a").attr('event_date'), event_date);
-	// 		});
-
-	// 		$("div#changing_days_nav div#previousday a").attr('value', function(i,val) {
-	// 			return val.replace($("div#changing_days_nav div#previousday a").attr('value'), event_date);
-	// 		});
-
-	// 	} else if (button == "previousday") {
-	// 		$("div#changing_days_nav div#" + button + " a").attr('event_date', function(i,val) {
-	// 			return val.replace($("div#changing_days_nav div#" + button + " a").attr('event_date'), event_date);
-	// 		});
-
-	// 		$("div#changing_days_nav div#nextday a").attr('value', function(i,val) {
-	// 			return val.replace($("div#changing_days_nav div#nextday a").attr('value'), event_date);
-	// 		});
-
-	// 	}
-	// }
 
 	//	We are hiding all the elements that are automatically loaded into the php page due to how jQuery mobile automatically renders all of the page
 	//	with added classes, instead of having to re-add these classes later on, we can get jQuery to format all of the links, listviews for us at first
@@ -363,10 +327,10 @@ $('#Events').live('pageinit', function() {
 
 					load_event_information(json[0]);
 
-					if($('div#changing_days_nav div#previousday a').attr('event-date') == '') {
+					if ($('div#changing_days_nav div#previousday a').attr('event-date') == '') {
 						$('div#changing_days_nav div#previousday').hide();
 					} else {
-						if($('div#changing_days_nav div#previousday').is(":hidden")) {
+						if ($('div#changing_days_nav div#previousday').is(":hidden")) {
 							$('div#changing_days_nav div#previousday').show();
 						}
 					}
@@ -395,39 +359,6 @@ $('#Scan').live('pageinit', function() {
 });
 
 $('#GuestList').live('pageinit', function() {
-
-	// function will_call_list(json_result) {
-	// 	var holder = [];
-	// 	holder.push('<table><tr><th>Last Name</th><th>First Name</th><th>Quantity</th><th>Ticket</th></tr>');
-	// 	$.each(json_result, function(key, val) {
-	// 		console.log(json_result);
-	// 		holder.push('<tr><td>' + val.lname + '</td>' + '<td>' + val.fname + '</td><td>' + val.quantity + '</td><td>' + val.ticket + '</td></tr>'); 
-	// 	});
-	// 	holder.push('</table>');
-	// 	$('div#guestlist').append().html(holder.join(' '));
-	// }
-
-	// var data = {
-	// 	'ct_contract_ide' : ct_contract_ide
-	// }
-	// console.log('From the guest list, this is the ct_contract_ide ' + ct_contract_ide);
-	// // Post data for the guest-list
-	// $.post('/scanner/ajax/guest-list', data, function(json) {
-	// 	aql.json.handle(json, null, {
-	// 		success: function() {
-	// 			console.log(json[0]);
-	// 			if(json[0] == null) {
-	// 				$('div#guestlist').text('There was an error returning any guests for this event');
-	// 			} else {
-	// 				will_call_list(json[0]);
-	// 			}
-	// 		},
-	// 		error: function() {
-	// 			console.log(json[0]);
-	// 			$('div#guestlist').text('There was an error loading the guest list.');
-	// 		}
-	// 	});				
-	// });
 	console.log('live from the guestlist page.');
 });
 
@@ -435,6 +366,5 @@ $('#GuestList').live('pageinit', function() {
 //	the footer nav-bar will select the correct button for the navigation.
 $("div[data-role='page']").live('pagebeforeshow', function() {
 	var current_page = $.mobile.activePage.attr('id');
-
 	$("footer[data-role='footer'] a#" + current_page).addClass('ui-btn-active ui-state-persist');
 });
