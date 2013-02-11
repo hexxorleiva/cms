@@ -32,7 +32,7 @@ div#ct_promoter_listings_event ul#listings {
 /* Footer Icons */
 
 .ui-icon-purchase {
-	background: url('/templates/scanner/images/credit_card.png') no-repeat;
+	background: url('/templates/scanner/images/purchase.png') no-repeat;
     -moz-border-radius: 0px;
     -webkit-border-radius:0px;
     border-radius:0px;
