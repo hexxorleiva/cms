@@ -11,7 +11,7 @@ var ct_contract_ide;
 var next_day_event;
 var previous_day_event;
 
-$('#Events').live('pagebeforeshow', function() {
+$('#Events').live('pageinit', function() {
 	//	When the page is loaded initally, grab the ct_promoter that is in the selector
 	//	and then send that information to ajax page /scanner/ajax/ct-promoter-events.php
 	//	and bring back all the information on all the events.
@@ -69,7 +69,7 @@ $('#Events').live('pagebeforeshow', function() {
 			}
 
 			//	Go through each event that is returned from the json response from the ajax page and format it to be displayed on the page
-			holder.push('<li><a class="ui-link" href="/scanner/events/scan" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
+			holder.push('<li><a class="ui-link" href="/scanner/events/scan?ct_contract_ide=' + val.ct_contract_ide  + '" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
 			'</a>' + '</li>');
 		});
 		
@@ -396,38 +396,38 @@ $('#Scan').live('pageinit', function() {
 
 $('#GuestList').live('pageinit', function() {
 
-	function will_call_list(json_result) {
-		var holder = [];
-		holder.push('<table><tr><th>Last Name</th><th>First Name</th><th>Quantity</th><th>Ticket</th></tr>');
-		$.each(json_result, function(key, val) {
-			console.log(json_result);
-			holder.push('<tr><td>' + val.lname + '</td>' + '<td>' + val.fname + '</td><td>' + val.quantity + '</td><td>' + val.ticket + '</td></tr>'); 
-		});
-		holder.push('</table>');
-		$('div#guestlist').append().html(holder.join(' '));
-	}
+	// function will_call_list(json_result) {
+	// 	var holder = [];
+	// 	holder.push('<table><tr><th>Last Name</th><th>First Name</th><th>Quantity</th><th>Ticket</th></tr>');
+	// 	$.each(json_result, function(key, val) {
+	// 		console.log(json_result);
+	// 		holder.push('<tr><td>' + val.lname + '</td>' + '<td>' + val.fname + '</td><td>' + val.quantity + '</td><td>' + val.ticket + '</td></tr>'); 
+	// 	});
+	// 	holder.push('</table>');
+	// 	$('div#guestlist').append().html(holder.join(' '));
+	// }
 
-	var data = {
-		'ct_contract_ide' : ct_contract_ide
-	}
-	console.log('From the guest list, this is the ct_contract_ide ' + ct_contract_ide);
-	// Post data for the guest-list
-	$.post('/scanner/ajax/guest-list', data, function(json) {
-		aql.json.handle(json, null, {
-			success: function() {
-				console.log(json[0]);
-				if(json[0] == null) {
-					$('div#guestlist').text('There was an error returning any guests for this event');
-				} else {
-					will_call_list(json[0]);
-				}
-			},
-			error: function() {
-				console.log(json[0]);
-				$('div#guestlist').text('There was an error loading the guest list.');
-			}
-		});				
-	});
+	// var data = {
+	// 	'ct_contract_ide' : ct_contract_ide
+	// }
+	// console.log('From the guest list, this is the ct_contract_ide ' + ct_contract_ide);
+	// // Post data for the guest-list
+	// $.post('/scanner/ajax/guest-list', data, function(json) {
+	// 	aql.json.handle(json, null, {
+	// 		success: function() {
+	// 			console.log(json[0]);
+	// 			if(json[0] == null) {
+	// 				$('div#guestlist').text('There was an error returning any guests for this event');
+	// 			} else {
+	// 				will_call_list(json[0]);
+	// 			}
+	// 		},
+	// 		error: function() {
+	// 			console.log(json[0]);
+	// 			$('div#guestlist').text('There was an error loading the guest list.');
+	// 		}
+	// 	});				
+	// });
 	console.log('live from the guestlist page.');
 });
 
@@ -435,5 +435,6 @@ $('#GuestList').live('pageinit', function() {
 //	the footer nav-bar will select the correct button for the navigation.
 $("div[data-role='page']").live('pagebeforeshow', function() {
 	var current_page = $.mobile.activePage.attr('id');
+
 	$("footer[data-role='footer'] a#" + current_page).addClass('ui-btn-active ui-state-persist');
 });

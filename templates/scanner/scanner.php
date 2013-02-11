@@ -97,8 +97,12 @@ if ( $template_area == 'top' ) {
 						unset($footer_nav_icon);
 						break;
 				}
+
+				if($_GET['ct_contract_ide']) {
+					$ct_contract_ide = $_GET['ct_contract_ide'];
+				}
 ?>
-				<li><a id="<?=$tab?>" data-icon="<?=$footer_nav_icon?>" href="<?=$tab_link?>"><?=$tab_name?></a></li>
+				<li><a id="<?=$tab?>" data-icon="<?=$footer_nav_icon?>" href="<?=$tab_link . '?ct_contract_ide=' . $ct_contract_ide?>"><?=$tab_name?></a></li>
 <?
 			}
 ?>
