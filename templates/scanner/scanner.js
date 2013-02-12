@@ -69,7 +69,7 @@ $('#Events').live('pageinit', function() {
 			}
 
 			//	Go through each event that is returned from the json response from the ajax page and format it to be displayed on the page
-			holder.push('<li><a class="ui-link" href="/scanner/events/scan?ct_contract_ide=' + val.ct_contract_ide  + '" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
+			holder.push('<li><a class="ui-link" data-ajax="false" href="/scanner/events/scan?ct_contract_ide=' + val.ct_contract_ide  + '" ct_contract_ide="' + val.ct_contract_ide + '">' + '<h2>' + val.name + '</h2>' + 
 			'</a>' + '</li>');
 		});
 		
