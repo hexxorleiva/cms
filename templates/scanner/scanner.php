@@ -51,7 +51,7 @@ if ( $template_area == 'top' ) {
 <?
 		if($this->breadcrumb) {
 ?>
-		<a href="<?=$this->breadcrumb?>" data-transition="slide">Back</a>
+		<a href="<?=$this->breadcrumb?>" data-transition="slide" data-rel="back">Back</a>
 <?
 		}
 ?>

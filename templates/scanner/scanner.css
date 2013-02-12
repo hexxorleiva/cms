@@ -137,11 +137,41 @@ div.middle div#changing_days_nav div#nextday {
 }
 
 div.middle div.name {
+	float: left;
 	font-size:16px;
 	padding: 0px 10px;
 }
 
 div.middle div.ticket_info {
-	font-size:12px;
-	padding: 5px 10px;
+	text-align: right;
+	font-size:16px;
+	padding: 0px 10px;
+}
+
+table.order-table {
+	margin: 0 auto;
+}
+
+table.order-table {
+    color: black;
+    background: #fff;
+    border: 1px solid #b4b4b4;
+    padding: 0;
+    margin-top:10px;
+    width: 100%;
+}
+
+table caption {
+	padding-bottom: 10px;
+}
+
+table.order-table tbody td {
+	font-size: 14px;
+ 	border-bottom: 1px solid rgba(0, 0, 0, .2);
+ 	padding: 10px 0;
+}
+
+table.order-table tbody td.order-title {
+	padding: 15px;
+	font-weight: bold;
 }
