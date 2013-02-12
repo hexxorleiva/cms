@@ -174,4 +174,5 @@ table.order-table tbody td {
 table.order-table tbody td.order-title {
 	padding: 15px;
 	font-weight: bold;
+	border-right: 1px solid rgba(0, 0, 0, .3);
 }
